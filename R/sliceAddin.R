@@ -32,4 +32,5 @@ sliceAddin <- function() {
   disconnect()
 }
 
+# TODO this should be removed when this is published as an actual addin - i think
 sliceAddin()
