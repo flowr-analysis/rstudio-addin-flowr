@@ -1,18 +1,35 @@
 #' @export
 sliceAddin <- function() {
   context <- rstudioapi::getActiveDocumentContext()
-  selection <- context$selections
+  selection <- context$selection[[1]]$range["start"][[1]]
   
-  # TODO the context needs to turn into the criterion below somehow
-  print(context)
+  # TODO this only works if the cursor is placed at the start of the variable right now!
+  criterion <- paste(selection[[1]], ":", selection[[2]], sep = "")
 
-  response <- sendFlowrRequest(list(
-    type = "request-slice",
-    # TODO this id needs to be set to something better?
-    id = 0,
+  print(paste("Slicing for criterion ", criterion, sep = ""))
+
+  connectIfNecessary()
+
+  # analyze the file
+  analysis <- sendRequest(list(
+    type = "request-file-analysis",
+    id = "0",
+    filename = context$path,
+    format = "json",
     filetoken = "@tmp",
-    criterion = list("0:0")
+    content = paste(context$contents, collapse = "\n")
   ))
+
+  # slice the file
+  slice <- sendRequest(list(
+    type = "request-slice",
+    id = "0",
+    filetoken = "@tmp",
+    criterion = list(criterion)
+  ))
+  print(slice)
+  
+  disconnect()
 }
 
 sliceAddin()

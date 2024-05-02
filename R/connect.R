@@ -1,16 +1,35 @@
 library(jsonlite)
 
-# TODO this shouldn't be a one-off connection for each command
-sendFlowrRequest <- function(command) {
+connectIfNecessary <- function() {
+  if (!is.null(connection)) {
+    return
+  }
+
   # TODO make host and port configurable
-  connection <- socketConnection(host = "localhost", port = 1042, server = FALSE, open = "r+")
-  
-  request <- jsonlite::toJSON(command)
+  connection <<- socketConnection(host = "localhost", port = 1042, server = FALSE, blocking = TRUE, open = "r+")
+
+  # the first response is the hello message
+  hello <- readLines(connection, n = 1)
+  print(hello)
+}
+
+sendRequest <- function(command) {
+  if (is.null(connection)) {
+    stop("Not connected to server")
+  }
+
+  request <- jsonlite::toJSON(command, auto_unbox = TRUE)
   writeLines(request, connection)
-  
+
   response <- readLines(connection, n = 1)
-  
-  close(connection)
-  
   return(response)
+}
+
+disconnect <- function() {
+  if (is.null(connection)) {
+    return
+  }
+
+  close(connection)
+  connection <<- NULL
 }
