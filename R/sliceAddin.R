@@ -2,7 +2,7 @@
 sliceAddin <- function() {
   context <- rstudioapi::getActiveDocumentContext()
   selection <- context$selection[[1]]$range["start"][[1]]
-  
+
   # TODO this only works if the cursor is placed at the start of the variable right now!
   criterion <- paste(selection[[1]], ":", selection[[2]], sep = "")
 
@@ -28,9 +28,6 @@ sliceAddin <- function() {
     criterion = list(criterion)
   ))
   print(slice)
-  
+
   disconnect()
 }
-
-# TODO this should be removed when this is published as an actual addin - i think
-sliceAddin()

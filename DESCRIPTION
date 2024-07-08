@@ -1,0 +1,10 @@
+Package: rstudioaddinflowr
+Title: RStudio Addin for flowR
+Version: 0.1.0
+Description: TODO
+Depends:
+    R (>= 3.0.0)
+Imports:
+    rstudioapi (>= 0.4),
+License: TODO
+LazyData: true
