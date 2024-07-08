@@ -1,4 +1,4 @@
 Name: flowR: Slice for Cursor Position
 Description: Generates a slice of the currently highlighted variable
-Binding: sliceAddin
+Binding: slice_addin
 Interactive: false

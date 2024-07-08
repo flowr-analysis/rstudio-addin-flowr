@@ -1,5 +1,5 @@
 #' @export
-sliceAddin <- function() {
+slice_addin <- function() {
   context <- rstudioapi::getActiveDocumentContext()
   selection <- context$selection[[1]]$range["start"][[1]]
 
@@ -8,10 +8,10 @@ sliceAddin <- function() {
 
   print(paste("Slicing for criterion ", criterion, sep = ""))
 
-  connectIfNecessary()
+  connect_if_necessary()
 
   # analyze the file
-  analysis <- sendRequest(list(
+  send_request(list(
     type = "request-file-analysis",
     id = "0",
     filename = context$path,
@@ -21,7 +21,7 @@ sliceAddin <- function() {
   ))
 
   # slice the file
-  slice <- sendRequest(list(
+  slice <- send_request(list(
     type = "request-slice",
     id = "0",
     filetoken = "@tmp",
@@ -29,5 +29,6 @@ sliceAddin <- function() {
   ))
   print(slice)
 
+  # TODO we shouldn't have to disconnect every time! figure out when to auto-disconnect (dispose?)
   disconnect()
 }

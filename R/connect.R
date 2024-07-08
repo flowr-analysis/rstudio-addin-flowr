@@ -1,6 +1,8 @@
 library(jsonlite)
 
-connectIfNecessary <- function() {
+connection <<- NULL
+
+connect_if_necessary <- function() {
   if (!is.null(connection)) {
     return
   }
@@ -13,7 +15,7 @@ connectIfNecessary <- function() {
   print(hello)
 }
 
-sendRequest <- function(command) {
+send_request <- function(command) {
   if (is.null(connection)) {
     stop("Not connected to server")
   }

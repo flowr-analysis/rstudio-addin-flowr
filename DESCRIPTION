@@ -1,3 +1,4 @@
+Encoding: UTF-8
 Package: rstudioaddinflowr
 Title: RStudio Addin for flowR
 Version: 0.1.0
@@ -7,3 +8,4 @@ Depends:
 Imports:
     rstudioapi (>= 0.4),
 License: TODO
+RoxygenNote: 7.3.2
