@@ -7,7 +7,7 @@ RStudio addin for [*flowR*](https://github.com/Code-Inspect/flowr)
 To install a development version of the addin for testing in RStudio, run
 
 ```R
-devtools::install_local(".", force = TRUE)
+devtools::install_local(".", force = TRUE); devtools::reload()
 ```
 
 from the repository's root directory.

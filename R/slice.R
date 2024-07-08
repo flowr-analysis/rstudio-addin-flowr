@@ -3,8 +3,7 @@ slice_addin <- function() {
   context <- rstudioapi::getActiveDocumentContext()
   selection <- context$selection[[1]]$range["start"][[1]]
 
-  # TODO this only works if the cursor is placed at the start of the variable right now!
-  criterion <- paste(selection[[1]], ":", selection[[2]], sep = "")
+  criterion <- find_criterion(selection[[1]], selection[[2]], context$contents)
 
   print(paste("Slicing for criterion ", criterion, sep = ""))
 
