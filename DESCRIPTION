@@ -7,4 +7,3 @@ Depends:
 Imports:
     rstudioapi (>= 0.4),
 License: TODO
-LazyData: true
