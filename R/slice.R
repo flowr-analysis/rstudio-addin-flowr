@@ -37,11 +37,9 @@ slice_addin <- function() {
   slice <- result$results$slice$result
 
   # convert slice info to lines
-  index <- 1
   slice_locations <- list()
   for (id in slice) {
-    slice_locations[[index]] <- id_to_location_map[paste0(id)]
-    index <- index + 1
+    slice_locations[[length(slice_locations) + 1]] <- id_to_location_map[paste0(id)]
   }
   mark_slice(slice_locations, context$path, criterion)
 
