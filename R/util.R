@@ -87,21 +87,19 @@ visit_node <- function(node, callback) {
   )
 }
 
-mark_slice <- function(lines, path) {
-  rstudioapi::sourceMarkers("flowr-slice", list(
-    list(
-      type = "error",
-      file = path,
-      line = 4,
-      column = 1,
-      message = "hi"
-    ),
-    list(
+mark_slice <- function(slice_locations, path, criterion) {
+  index <- 1
+  markers <- list()
+  for (location in slice_locations) {
+    markers[[index]] <- list(
       type = "info",
       file = path,
-      line = 3,
-      column = 1,
-      message = "hi"
+      line = as.numeric(location[[1]][[1]]),
+      column = as.numeric(location[[1]][[2]]),
+      message = paste0("Member of slice for ", criterion)
     )
-  ))
+    index <- index + 1
+  }
+  print(markers)
+  rstudioapi::sourceMarkers("flowr-slice", markers)
 }

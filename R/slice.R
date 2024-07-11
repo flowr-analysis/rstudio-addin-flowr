@@ -26,7 +26,6 @@ slice_addin <- function() {
       id_to_location_map[paste0(node$info$id)] <<- list(node$location)
     }
   })
-  print(id_to_location_map)
 
   # slice the file
   result <- send_request(list(
@@ -38,8 +37,13 @@ slice_addin <- function() {
   slice <- result$results$slice$result
 
   # convert slice info to lines
-  slice_lines <- list()
-  mark_slice(slice_lines, context$path)
+  index <- 1
+  slice_locations <- list()
+  for (id in slice) {
+    slice_locations[[index]] <- id_to_location_map[paste0(id)]
+    index <- index + 1
+  }
+  mark_slice(slice_locations, context$path, criterion)
 
   # TODO we shouldn't have to disconnect every time! figure out when to auto-disconnect (dispose?)
   disconnect()
