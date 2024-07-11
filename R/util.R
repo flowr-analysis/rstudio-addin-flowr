@@ -91,15 +91,16 @@ mark_slice <- function(slice_locations, path, criterion) {
   index <- 1
   markers <- list()
   for (location in slice_locations) {
+    loc <- location[[1]]
     markers[[index]] <- list(
       type = "info",
       file = path,
-      line = as.numeric(location[[1]][[1]]),
-      column = as.numeric(location[[1]][[2]]),
-      message = paste0("Member of slice for ", criterion)
+      line = as.numeric(loc[[1]]),
+      column = as.numeric(loc[[2]]),
+      message = paste0("Member of slice for ", criterion, " (", loc[[1]], ":", loc[[2]], " -> ", loc[[3]], ":", loc[[4]], ")")
     )
     index <- index + 1
   }
   rstudioapi::sourceMarkers("flowr-slice", markers)
-  print(paste0("Highlighting ", length(markers), " lines for slice ", criterion))
+  print(paste0("Highlighting ", length(markers), " tokens for slice ", criterion))
 }
