@@ -5,28 +5,41 @@ slice_addin <- function() {
 
   criterion <- find_criterion(selection[[1]], selection[[2]], context$contents)
 
-  print(paste("Slicing for criterion ", criterion, sep = ""))
+  print(paste0("Slicing for criterion ", criterion))
 
   connect_if_necessary()
 
   # analyze the file
-  send_request(list(
+  analysis <- send_request(list(
     type = "request-file-analysis",
     id = "0",
     filename = context$path,
     format = "json",
     filetoken = "@tmp",
-    content = paste(context$contents, collapse = "\n")
+    content = paste0(context$contents, collapse = "\n")
   ))
 
+  # map node ids to their location
+  id_to_location_map <- list()
+  visit_node(analysis$results$normalize$ast, function(node) {
+    if (!is.null(node$location)) {
+      id_to_location_map[paste0(node$info$id)] <<- list(node$location)
+    }
+  })
+  print(id_to_location_map)
+
   # slice the file
-  slice <- send_request(list(
+  result <- send_request(list(
     type = "request-slice",
     id = "0",
     filetoken = "@tmp",
     criterion = list(criterion)
   ))
-  print(slice)
+  slice <- result$results$slice$result
+
+  # convert slice info to lines
+  slice_lines <- list()
+  mark_slice(slice_lines, context$path)
 
   # TODO we shouldn't have to disconnect every time! figure out when to auto-disconnect (dispose?)
   disconnect()

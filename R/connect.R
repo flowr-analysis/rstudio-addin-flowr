@@ -1,5 +1,3 @@
-library(jsonlite)
-
 connection <<- NULL
 
 connect_if_necessary <- function() {
@@ -24,7 +22,7 @@ send_request <- function(command) {
   writeLines(request, connection)
 
   response <- readLines(connection, n = 1)
-  return(response)
+  return(jsonlite::fromJSON(response, simplifyVector = FALSE, simplifyDataFrame = FALSE, simplifyMatrix = FALSE))
 }
 
 disconnect <- function() {
