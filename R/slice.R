@@ -7,10 +7,13 @@ slice_addin <- function() {
 
   print(paste0("Slicing for criterion ", criterion))
 
-  connect_if_necessary()
+  # TODO allow configuring host and port
+  conn_hello <- flowradapter::connect("localhost", 1042)
+  connection <- conn_hello[[1]]
+  print(conn_hello[[2]])
 
   # analyze the file
-  analysis <- send_request(list(
+  analysis <- flowradapter::send_request(connection, list(
     type = "request-file-analysis",
     id = "0",
     filename = context$path,
@@ -21,14 +24,14 @@ slice_addin <- function() {
 
   # map node ids to their location
   id_to_location_map <- list()
-  visit_node(analysis$results$normalize$ast, function(node) {
+  flowradapter::visit_node(analysis$results$normalize$ast, function(node) {
     if (!is.null(node$location)) {
       id_to_location_map[paste0(node$info$id)] <<- list(node$location)
     }
   })
 
   # slice the file
-  result <- send_request(list(
+  result <- flowradapter::send_request(connection, list(
     type = "request-slice",
     id = "0",
     filetoken = "@tmp",
@@ -44,5 +47,5 @@ slice_addin <- function() {
   mark_slice(slice_locations, context$path, criterion)
 
   # TODO we shouldn't have to disconnect every time! figure out when to auto-disconnect (dispose?)
-  disconnect()
+  flowradapter::disconnect(connection)
 }

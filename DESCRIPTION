@@ -7,5 +7,6 @@ Depends:
     R (>= 3.0.0)
 Imports:
     rstudioapi (>= 0.4),
+    flowradapter
 License: TODO
 RoxygenNote: 7.3.2
