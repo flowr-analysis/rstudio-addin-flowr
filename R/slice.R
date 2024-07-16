@@ -48,4 +48,24 @@ slice_addin <- function() {
 
   # TODO we shouldn't have to disconnect every time! figure out when to auto-disconnect (dispose?)
   flowradapter::disconnect(connection)
+
+  return(result)
+}
+
+#' @export
+reconstruct_addin <- function() {
+  ui <- miniUI::miniPage(miniUI::miniContentPanel(
+    shiny::uiOutput("code")
+  ))
+  server <- function(input, output, session) {
+    result <- slice_addin()
+    code <- result$results$reconstruct$code
+    output$code <- shiny::renderUI({
+      # TODO wrap this in syntax highlighting
+      shiny::pre(code)
+    })
+  }
+
+  viewer <- shiny::paneViewer(300)
+  shiny::runGadget(ui, server, viewer = viewer)
 }

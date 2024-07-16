@@ -6,7 +6,9 @@ Description: TODO
 Depends:
     R (>= 3.0.0)
 Imports:
-    rstudioapi (>= 0.4),
+    shiny,
+    miniUI,
+    rstudioapi,
     flowradapter
 License: TODO
 RoxygenNote: 7.3.2
