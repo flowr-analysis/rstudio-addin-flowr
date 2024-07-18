@@ -23,22 +23,3 @@ mark_slice <- function(slice_locations, path, criterion) {
   rstudioapi::sourceMarkers("flowr-slice", markers)
   print(paste0("Highlighting ", length(markers), " tokens for slice ", criterion))
 }
-
-# see https://github.com/rstudio/addinexamples/blob/master/R/utils.R
-include_highlightjs <- function() {
-  resources <- system.file("www/shared/highlight", package = "shiny")
-  code <- "
-  Shiny.addCustomMessageHandler('highlight-code', function(m) {
-    setTimeout(function() { hljs.highlightBlock(document.querySelector(m['selector'])) }, 100);
-  });
-  "
-  list(
-    shiny::includeScript(file.path(resources, "highlight.pack.js")),
-    shiny::includeCSS(file.path(resources, "rstudio.css")),
-    shiny::tags$script(code)
-  )
-}
-
-highlight_code <- function(session, selector) {
-  session$sendCustomMessage("highlight-code", list(selector = selector))
-}

@@ -52,27 +52,10 @@ slice_addin <- function() {
   return(result)
 }
 
-# TODO this is currently a full "application", so other stuff can't run while the shiny server is open - that's not really intended, but how2fix
 #' @export
 reconstruct_addin <- function() {
-  ui <- miniUI::miniPage(
-    include_highlightjs(),
-    miniUI::miniContentPanel(
-      shiny::uiOutput("code")
-    )
-  )
-  server <- function(input, output, session) {
-    result <- slice_addin()
-    code <- result$results$reconstruct$code
-    print(paste0("Showing reconstruct view for ", code))
-
-    output$code <- shiny::renderUI({
-      pre <- shiny::pre(shiny::HTML(as.character(shiny::tags$code(class = "language-r", code))))
-      highlight_code(session, "#code code.language-r")
-      return(pre)
-    })
-  }
-
-  viewer <- shiny::paneViewer(300)
-  shiny::runGadget(ui, server, viewer = viewer)
+  result <- slice_addin()
+  code <- result$results$reconstruct$code
+  print(paste0("Showing reconstruct view for ", code))
+  display_code(code)
 }
