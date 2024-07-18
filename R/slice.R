@@ -67,7 +67,7 @@ reconstruct_addin <- function() {
     print(paste0("Showing reconstruct view for ", code))
 
     output$code <- shiny::renderUI({
-      pre <- shiny::pre(HTML(as.character(tags$code(class = "language-r", code))))
+      pre <- shiny::pre(shiny::HTML(as.character(shiny::tags$code(class = "language-r", code))))
       highlight_code(session, "#code code.language-r")
       return(pre)
     })
