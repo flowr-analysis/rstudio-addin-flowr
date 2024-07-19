@@ -21,7 +21,8 @@ display_html <- function(head, body) {
 
 display_code <- function(code) {
   dark <- rstudioapi::getThemeInfo()[["dark"]]
-  style <- if (dark) "github-dark" else "github"
+  # TODO use the preferences system for this
+  style <- if (dark) "github-dark-dimmed" else "github"
   display_html(
     sprintf('
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/%s.min.css">
