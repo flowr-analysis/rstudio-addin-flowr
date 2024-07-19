@@ -3,7 +3,12 @@ Description: Generates a slice of the currently highlighted variable
 Binding: slice_addin
 Interactive: true
 
-Name: flowr: Reconstruct for Cursor Position
+Name: flowR: Reconstruct for Cursor Position
 Description: Generates a slice for the currently highlighted variable and outputs the corresponding reconstructed code
 Binding: reconstruct_addin
+Interactive: true
+
+Name: flowR: Install Node.js and flowR Shell
+Description: Installs Node.js locally in the addin's package directory, as well as flowR's NPM package which provides a local version of the flowR shell
+Binding: install_node_addin
 Interactive: true
