@@ -20,17 +20,16 @@ display_html <- function(head, body) {
 }
 
 display_code <- function(code) {
-  display_html('
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>', sprintf('
-<div>
-  <pre>
-    <code class="language-r">
-%s
-    </code>
-  </pre>
-</div>
+  dark <- rstudioapi::getThemeInfo()[["dark"]]
+  style <- if (dark) "github-dark" else "github"
+  display_html(
+    sprintf('
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/%s.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>', style),
+    sprintf('
+<pre><code style="position: absolute; top: 0; left: 0; bottom: 0; right: 0;" class="language-r">%s</code></pre>
 <script>
   hljs.highlightAll();
-</script>', code))
+</script>', code)
+  )
 }
