@@ -57,5 +57,5 @@ reconstruct_addin <- function() {
   result <- slice_addin()
   code <- result$results$reconstruct$code
   print(paste0("Showing reconstruct view for ", code))
-  display_code(code)
+  display_code(if (is.null(code)) "No reconstructed code available" else code)
 }
