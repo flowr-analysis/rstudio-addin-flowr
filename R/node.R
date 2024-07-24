@@ -42,11 +42,13 @@ install_node_addin <- function() {
 }
 
 exec_flowr <- function(args) {
+  # we installed flowr globally (see above) in the scope of our local node installation, so we can find it here
   flowr_path <- file.path(get_node_exe_dir(), "node_modules", "@eagleoutice", "flowr", "cli", "flowr.js")
   exec_node_command("node", paste(flowr_path, args))
 }
 
 exec_node_command <- function(app, args) {
+  # linux/mac have binaries in the bin subdirectory, windows has node.exe and npm/npx.cmd in the root, bleh
   path <- if (get_os() == "win") paste0(app, if (app == "node") ".exe" else ".cmd") else file.path("bin", app)
   cmd <- file.path(get_node_exe_dir(), path)
   print(paste0("Executing ", cmd, " ", paste0(args, collapse = " ")))
@@ -54,8 +56,10 @@ exec_node_command <- function(app, args) {
 }
 
 get_node_base_dir <- function() {
-  lib_paths <- .libPaths()
-  for (path in lib_paths) {
+  # we find the directory to install node into by finding the directory that
+  # the currently running instance of the package is (likely) installed in.
+  # this may seem like a terrible solution but it's the best one i could come up with :(
+  for (path in .libPaths()) {
     for (dir in list.dirs(path, full.names = FALSE, recursive = FALSE)) {
       if (dir == "rstudioaddinflowr") {
         return(file.path(path, dir, "_node"))
@@ -68,6 +72,8 @@ get_node_base_dir <- function() {
 get_node_exe_dir <- function() {
   base_dir <- get_node_base_dir()
   if (dir.exists(base_dir)) {
+    # we installed node like _node/node-versionblahblah/node.exe etc, and since we
+    # delete the old installation every time, we expect a single directory of this form
     node_dirs <- list.dirs(base_dir, recursive = FALSE)
     if (length(node_dirs) == 1) {
       return(node_dirs[[1]])
