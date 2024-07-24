@@ -1,25 +1,17 @@
 #' @export
 install_node_addin <- function() {
-  info <- Sys.info()
-  os <- switch(info[["sysname"]],
-    Windows = "win",
-    Darwin = "mac",
-    Linux = "linux",
-    stop(paste0("Unsupported operating system ", info[["sysname"]]))
-  )
-  arch <- switch(info[["machine"]],
+  os <- get_os()
+  arch <- switch(Sys.info()[["machine"]],
     "x86-64" = "x64",
     "x86_64" = "x64",
     "x86-32" = "x86",
     "x86_32" = "x86",
-    stop(paste0("Unsupported architecture ", info[["machine"]]))
+    stop(paste0("Unsupported architecture ", Sys.info()[["machine"]]))
   )
-  print(paste0("Running on ", os, arch))
 
   # TODO node version should be configurable
   node_ver <- "22.5.1"
-  # TODO install location? package install directory, RStudio install directory, etc. not here though
-  node_base_dir <- path.expand(file.path("~", "_flowrnode"))
+  node_base_dir <- get_node_base_dir()
   print(paste0("Installing node ", node_ver, " in ", node_base_dir))
 
   if (dir.exists(node_base_dir)) {
@@ -29,11 +21,7 @@ install_node_addin <- function() {
   dir.create(node_base_dir)
 
   # url example: https://nodejs.org/dist/v22.5.1/node-v22.5.1-win-x86.zip
-  file_type <- switch(os,
-    win = "zip",
-    linux = "tar.xz",
-    mac = "tar.gz"
-  )
+  file_type <- if (os == "win") "zip" else "tar.gz"
   node_archive_dest <- file.path(node_base_dir, paste0("node.", file_type))
   node_file_name <- sprintf("node-v%s-%s-%s", node_ver, os, arch)
   download.file(sprintf("https://nodejs.org/dist/v%s/%s.%s", node_ver, node_file_name, file_type), node_archive_dest)
@@ -46,8 +34,53 @@ install_node_addin <- function() {
   }
   unlink(node_archive_dest)
 
-  node_dir <- file.path(node_base_dir, node_file_name)
-  print(paste0("Extracted node archive to ", node_dir))
+  print(paste0("Extracted node archive to ", file.path(node_base_dir, node_file_name)))
 
-  # TODO install flowr through our local npm
+  # TODO flowr version should be configurable
+  exec_node_command("npm", "install -g @eagleoutice/flowr")
+  exec_flowr("--version")
+}
+
+exec_flowr <- function(args) {
+  flowr_path <- file.path(get_node_exe_dir(), "node_modules", "@eagleoutice", "flowr", "cli", "flowr.js")
+  exec_node_command("node", paste(flowr_path, args))
+}
+
+exec_node_command <- function(app, args) {
+  path <- if (get_os() == "win") paste0(app, if (app == "node") ".exe" else ".cmd") else file.path("bin", app)
+  cmd <- file.path(get_node_exe_dir(), path)
+  print(paste0("Executing ", cmd, " ", paste0(args, collapse = " ")))
+  system2(cmd, args)
+}
+
+get_node_base_dir <- function() {
+  lib_paths <- .libPaths()
+  for (path in lib_paths) {
+    for (dir in list.dirs(path, full.names = FALSE, recursive = FALSE)) {
+      if (dir == "rstudioaddinflowr") {
+        return(file.path(path, dir, "_node"))
+      }
+    }
+  }
+  stop(paste0("Could not find rstudioaddinflowr directory in any libPaths"))
+}
+
+get_node_exe_dir <- function() {
+  base_dir <- get_node_base_dir()
+  if (dir.exists(base_dir)) {
+    node_dirs <- list.dirs(base_dir, recursive = FALSE)
+    if (length(node_dirs) == 1) {
+      return(node_dirs[[1]])
+    }
+  }
+  stop(paste0("Node not installed correctly in ", base_dir))
+}
+
+get_os <- function() {
+  return(switch(Sys.info()[["sysname"]],
+    Windows = "win",
+    Linux = "linux",
+    Darwin = "darwin",
+    stop(paste0("Unsupported operating system ", Sys.info()[["sysname"]]))
+  ))
 }
