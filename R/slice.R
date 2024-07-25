@@ -7,8 +7,9 @@ slice_addin <- function() {
 
   print(paste0("Slicing for criterion ", criterion))
 
-  # TODO allow configuring host and port
-  conn_hello <- flowradapter::connect("localhost", 1042)
+  host <- read_flowr_pref(pref_server_host, "localhost")
+  port <- read_flowr_pref(pref_server_port, 1042)
+  conn_hello <- flowradapter::connect(host, port)
   connection <- conn_hello[[1]]
   print(conn_hello[[2]])
 

@@ -9,8 +9,7 @@ install_node_addin <- function() {
     stop(paste0("Unsupported architecture ", Sys.info()[["machine"]]))
   )
 
-  # TODO node version should be configurable
-  node_ver <- "22.5.1"
+  node_ver <- read_flowr_pref(pref_node_version, default_node_version)
   node_base_dir <- get_node_base_dir()
   print(paste0("Installing node ", node_ver, " in ", node_base_dir))
 
@@ -36,8 +35,8 @@ install_node_addin <- function() {
 
   print(paste0("Extracted node archive to ", file.path(node_base_dir, node_file_name)))
 
-  # TODO flowr version should be configurable
-  exec_node_command("npm", "install -g @eagleoutice/flowr")
+  flowr_ver <- read_flowr_pref(pref_flowr_version, default_flowr_version)
+  exec_node_command("npm", paste0("install -g @eagleoutice/flowr@", flowr_ver))
   exec_flowr("--version")
 }
 

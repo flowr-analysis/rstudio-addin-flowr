@@ -21,12 +21,13 @@ display_html <- function(head, body) {
 
 display_code <- function(code) {
   dark <- rstudioapi::getThemeInfo()[["dark"]]
-  # TODO use the preferences system for this
-  style <- if (dark) "github-dark-dimmed" else "github"
+  theme_key <- if (dark) pref_dark_theme else pref_light_theme
+  default_theme <- if (dark) default_dark_theme else default_light_theme
+  theme <- read_flowr_pref(theme_key, default_theme)
   display_html(
     sprintf('
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/%s.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>', style),
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>', theme),
     sprintf('
 <pre><code style="position: absolute; top: 0; left: 0; bottom: 0; right: 0;" class="language-r">%s</code></pre>
 <script>
