@@ -12,3 +12,8 @@ Name: flowR: Install Node.js and flowR Shell
 Description: Installs Node.js locally in the addin's package directory, as well as flowR's NPM package which provides a local version of the flowR shell
 Binding: install_node_addin
 Interactive: true
+
+Name: flowR: Open Preferences
+Description: Opens the Preferences menu, where flowR-specific settings can be changed
+Binding: open_prefs_addin
+Interactive: true
