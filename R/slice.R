@@ -7,10 +7,10 @@ slice_addin <- function() {
 
   print(paste0("Slicing for criterion ", criterion))
 
-  connection <- start_or_connect_flowr()
+  conn_pid <- start_or_connect_flowr()
 
   # analyze the file
-  analysis <- flowr::send_request(connection, list(
+  analysis <- flowr::send_request(conn_pid$connection, list(
     type = "request-file-analysis",
     id = "0",
     filename = context$path,
@@ -28,7 +28,7 @@ slice_addin <- function() {
   })
 
   # slice the file
-  result <- flowr::send_request(connection, list(
+  result <- flowr::send_request(conn_pid$connection, list(
     type = "request-slice",
     id = "0",
     filetoken = "@tmp",
@@ -44,7 +44,7 @@ slice_addin <- function() {
   mark_slice(slice_locations, context$path, criterion)
 
   # TODO we shouldn't have to disconnect every time! figure out when to auto-disconnect (dispose?)
-  flowr::disconnect(connection)
+  stop_or_disconnect_flowr(conn_pid$connection, conn_pid$pid)
 
   return(invisible(result))
 }

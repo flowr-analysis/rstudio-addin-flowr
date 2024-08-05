@@ -7,7 +7,6 @@ install_node_addin <- function() {
 
   flowr_ver <- read_flowr_pref(pref_flowr_version, default_flowr_version)
   flowr::install_flowr(flowr_ver, TRUE, base)
-  flowr::exec_flowr("--version", TRUE, base)
 }
 
 node_base_dir <- function() {
