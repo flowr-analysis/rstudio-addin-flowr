@@ -7,11 +7,7 @@ slice_addin <- function() {
 
   print(paste0("Slicing for criterion ", criterion))
 
-  host <- read_flowr_pref(pref_server_host, default_server_host)
-  port <- read_flowr_pref(pref_server_port, default_server_port)
-  conn_hello <- flowr::connect(host, port)
-  connection <- conn_hello[[1]]
-  print(conn_hello[[2]])
+  connection <- start_or_connect_flowr()
 
   # analyze the file
   analysis <- flowr::send_request(connection, list(
@@ -50,7 +46,7 @@ slice_addin <- function() {
   # TODO we shouldn't have to disconnect every time! figure out when to auto-disconnect (dispose?)
   flowr::disconnect(connection)
 
-  return(result)
+  return(invisible(result))
 }
 
 #' @export
