@@ -10,6 +10,6 @@ Imports:
     bslib,
     miniUI,
     rstudioapi,
-    flowradapter
+    flowr
 License: TODO
 RoxygenNote: 7.3.2
