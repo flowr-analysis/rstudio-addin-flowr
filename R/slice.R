@@ -7,7 +7,8 @@ slice_addin <- function() {
 
   print(paste0("Slicing for criterion ", criterion))
 
-  conn_pid <- start_or_connect_flowr()
+  # nolint: object_usage_linter (fails to recognize flowr_session_storage as a global var)
+  conn_pid <- flowr_session_storage()
 
   # analyze the file
   analysis <- flowr::send_request(conn_pid$connection, list(
@@ -42,9 +43,6 @@ slice_addin <- function() {
     slice_locations[[length(slice_locations) + 1]] <- id_to_location_map[paste0(id)]
   }
   mark_slice(slice_locations, context$path, criterion)
-
-  # TODO we shouldn't have to disconnect every time! figure out when to auto-disconnect (dispose?)
-  stop_or_disconnect_flowr(conn_pid$connection, conn_pid$pid)
 
   return(invisible(result))
 }
