@@ -19,8 +19,12 @@ make_flowr_session_storage <- function() {
     if (is.null(connection)) {
       if (read_flowr_pref(pref_use_local_shell, default_use_local_shell)) {
         # start the shell
-        # TODO display a proper warning when flowR isn't yet installed locally
-        pid <<- flowr::exec_flowr(c("--server", "--port", default_server_port), TRUE, node_base_dir(), TRUE)
+        pid <<- tryCatch(
+          flowr::exec_flowr(c("--server", "--port", default_server_port), TRUE, node_base_dir(), TRUE),
+          error = function(e) {
+            stop(paste0("Failed to start local flowR server: ", e, "If flowR is not installed, you can do so by running the \"Install Node.js and flowR Shell\" addin (rstudioaddinflowr:::install_node_addin())."))
+          }
+        )
         print(paste0("Starting local flowR server with pid ", pid))
         host <- default_server_host
         port <- default_server_port
@@ -34,7 +38,12 @@ make_flowr_session_storage <- function() {
         port <- read_flowr_pref(pref_server_port, default_server_port)
       }
 
-      conn_hello <- flowr::connect(host, port)
+      conn_hello <- tryCatch(
+        flowr::connect(host, port),
+        error = function(e) {
+          stop(paste0("Failed to connect to flowR server at ", host, ":", port, ": ", e))
+        }
+      )
       print(conn_hello[[2]])
       connection <<- conn_hello[[1]]
     } else {

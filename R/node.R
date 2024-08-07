@@ -7,6 +7,8 @@ install_node_addin <- function() {
 
   flowr_ver <- read_flowr_pref(pref_flowr_version, default_flowr_version)
   flowr::install_flowr(flowr_ver, TRUE, base)
+
+  print("Successfully installed Node.js and flowR Shell")
 }
 
 node_base_dir <- function() {
