@@ -29,7 +29,7 @@ make_flowr_session_storage <- function() {
         host <- default_server_host
         port <- default_server_port
         # sleep a bit until the server has fully started up
-        Sys.sleep(3000)
+        Sys.sleep(3)
       } else {
         # connect externally
         print("Connecting to flowR server")
