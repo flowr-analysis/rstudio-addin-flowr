@@ -1,15 +1,20 @@
 Encoding: UTF-8
 Package: rstudioaddinflowr
-Title: RStudio Addin for flowR
+Title: R Slicer (flowR)
 Version: 0.1.0
-Description: TODO
+Authors@R: c(
+    person("Florian", "Sihler", email = "florian.sihler@uni-ulm.de", role = "cre"),
+    person("flowr-analysis", role = "cph"))
+Description: Retrieve R program slices directly within your IDE using flowR.
 Depends:
-    R (>= 3.0.0)
+    R (>= 4.0.0)
 Imports:
     shiny,
     bslib,
     miniUI,
     rstudioapi,
     flowr
-License: TODO
+License: GPL-3 + file LICENSE
 RoxygenNote: 7.3.2
+URL: https://github.com/flowr-analysis/rstudio-addin-flowr
+BugReports: https://github.com/flowr-analysis/rstudio-addin-flowr/issues

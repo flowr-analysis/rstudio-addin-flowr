@@ -1,3 +1,5 @@
+#' Generates a slice of the currently highlighted variable
+#'
 #' @export
 slice_addin <- function() {
   context <- rstudioapi::getActiveDocumentContext()
@@ -47,6 +49,8 @@ slice_addin <- function() {
   return(invisible(result))
 }
 
+#' Generates a slice for the currently highlighted variable and outputs the corresponding reconstructed code
+#'
 #' @export
 reconstruct_addin <- function() {
   result <- slice_addin()

@@ -22,6 +22,8 @@ read_flowr_pref <- function(name, default) {
   return(rstudioapi::readPreference(paste0("flowr_", name), default))
 }
 
+#' Opens the Preferences menu, where flowR-specific settings can be changed
+#'
 #' @export
 open_prefs_addin <- function() {
   ui <- miniUI::miniPage(

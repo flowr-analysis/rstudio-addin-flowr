@@ -1,3 +1,5 @@
+#' Installs Node.js locally in the addin's package directory, as well as flowR's NPM package which provides a local version of the flowR shell
+#'
 #' @export
 install_node_addin <- function() {
   base <- node_base_dir()
