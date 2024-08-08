@@ -8,8 +8,6 @@ RStudio addin for [*flowR*](https://github.com/Code-Inspect/flowr)
 This package is currently only available here on GitHub, but it can be installed easily using the devtools package by running the following commands:
 ```R
 install.packages("devtools")
-
-devtools::install_github("flowr-analysis/flowr-r-adapter")
 devtools::install_github("flowr-analysis/rstudio-addin-flowr")
 ```
 
