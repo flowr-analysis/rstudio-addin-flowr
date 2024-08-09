@@ -1,7 +1,7 @@
 Encoding: UTF-8
 Package: rstudioaddinflowr
 Title: R Slicer (flowR)
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
     person("Florian", "Sihler", email = "florian.sihler@uni-ulm.de", role = "cre"),
     person("flowr-analysis", role = "cph"))
