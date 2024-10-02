@@ -44,7 +44,7 @@ When using the "Reconstruct for Cursor Position" addin, the slice's reconstructe
 This addin requires the `flowr` package. It's recommended to clone [flowR-R-adapter](https://github.com/flowr-analysis/flowR-R-adapter) into the same parent directory as this addin, and then install a development version of it by running the following:
 
 ```R
-devtools::install_local("../flowr-R-adapter", force = TRUE)
+devtools::install_local("../flowr-r-adapter", force = TRUE)
 ```
 
 To install a development version of the addin for testing in RStudio, run
