@@ -14,11 +14,12 @@ install_node_addin <- function() {
   flowr::install_flowr(flowr_ver, TRUE, base)
 
   # check if the flowr namespace exists
-  if (!system.file(package = "flowr")) {
+  if ("flowr" %in% rownames(installed.packages())) {
+    print("Successfully installed Node.js and flowR Shell")
+  } else {
     stop("Failed to install flowR. Please check the R console for more information.")
   }
 
-  print("Successfully installed Node.js and flowR Shell")
 }
 
 node_base_dir <- function() {
