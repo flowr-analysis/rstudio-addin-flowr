@@ -7,7 +7,7 @@ pref_dark_theme <- "dark_theme"
 pref_use_local_shell <- "use_local_shell"
 
 default_node_version <- "22.5.1"
-default_flowr_version <- "2.0.11"
+default_flowr_version <- "2.0.25"
 default_server_host <- "localhost"
 default_server_port <- 1042
 default_light_theme <- "github"
