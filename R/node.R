@@ -4,22 +4,28 @@
 install_node_addin <- function() {
   base <- node_base_dir()
   print(paste0("Installing Node.js and flowR Shell in ", base))
-
   node_ver <- read_flowr_pref(pref_node_version, default_node_version)
   assure_valid_semver(node_ver)
-  flowr::install_node(node_ver, TRUE, base)
-
   flowr_ver <- read_flowr_pref(pref_flowr_version, default_flowr_version)
   assure_valid_semver(flowr_ver)
-  flowr::install_flowr(flowr_ver, TRUE, base)
-
-  # check if the flowr namespace exists
-  if ("flowr" %in% rownames(utils::installed.packages())) {
-    print("Successfully installed Node.js and flowR Shell")
-  } else {
-    stop("Failed to install flowR. Please check the R console for more information.")
-  }
-
+  tryCatch(
+    {
+      flowr::install_node(node_ver, TRUE, base)
+      flowr::install_flowr(flowr_ver, TRUE, base)
+      # check if the flowr namespace exists
+      if ("flowr" %in% rownames(utils::installed.packages())) {
+        print("Successfully installed Node.js and flowR Shell")
+      } else {
+        stop("Failed to install flowR. Please check the R console for more information.")
+      }
+    },
+    error = function(e) {
+      message(paste0("Failed to install node: ", e, "If you have Docker installed on your system, you can use Docker mode instead."))
+      if (rstudioapi::showQuestion("Use Docker mode?", "The local Node.js installation failed. If you have Docker installed on your system, you can enable Docker mode instead. Would you like to do so now?")) {
+        write_flowr_pref(pref_use_docker, TRUE)
+      }
+    }
+  )
 }
 
 node_base_dir <- function() {
