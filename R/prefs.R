@@ -32,14 +32,14 @@ open_prefs_addin <- function() {
     miniUI::gadgetTitleBar("flowR Preferences"),
     miniUI::miniContentPanel(
       shiny::h4("Local flowR shell"),
-      shiny::p("The local node and flowR versions will be used when running flowR commands without being connected to an external flowR server. flowR downloads the specified versions of node and the flowR NPM package if they are not already installed in the package directory."),
-      shiny::p("If you choose to use Docker instead of node to run flowR commands locally, Docker has to be installed on your system, and the Docker daemon has to be running."),
+      shiny::p("The local Node.js and flowR versions will be used when running flowR commands without being connected to an external flowR server. flowR downloads the specified versions of Node.js and the flowR NPM package if they are not already installed in the package directory."),
+      shiny::p("If you choose to use Docker instead of Node.js to run flowR commands locally, Docker has to be installed on your system, and the Docker daemon has to be running."),
       bslib::layout_columns(
         shiny::checkboxInput(pref_use_local_shell, "Use local shell", read_flowr_pref(pref_use_local_shell, default_use_local_shell)),
         shiny::checkboxInput(pref_use_docker, "Use Docker instead of node", read_flowr_pref(pref_use_docker, default_use_docker)),
       ),
       bslib::layout_columns(
-        shiny::textInput(pref_node_version, "Local node version", read_flowr_pref(pref_node_version, default_node_version)),
+        shiny::textInput(pref_node_version, "Local Node.js version", read_flowr_pref(pref_node_version, default_node_version)),
         shiny::textInput(pref_flowr_version, "Local flowR version", read_flowr_pref(pref_flowr_version, default_flowr_version)),
       ),
       shiny::h4("External flowR connection"),
