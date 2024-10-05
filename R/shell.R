@@ -28,6 +28,7 @@ make_flowr_session_storage <- function() {
               if (rstudioapi::showQuestion("Install Node.js and flowR Shell?", "The preferences state that you want to use a local flowR installation, but it is not installed. Do you want to install it now?")) {
                 install_node_addin()
               }
+              return(-1)
             }
           )
         } else {
@@ -37,8 +38,12 @@ make_flowr_session_storage <- function() {
             flowr::exec_flowr_docker(c("-p", paste0(default_server_port, ":", default_server_port)), flowr_ver, args, TRUE, "docker", TRUE),
             error = function(e) {
               message(paste0("Failed to start local flowR server using Docker: ", e, "If you want to run flowR using a local Node.js installation instead, you can change your preferences using the \"Open Preferences\" addin (rstudioaddinflowr:::open_prefs_addin())."))
+              return(-1)
             }
           )
+        }
+        if (pid == -1) {
+          return()
         }
         print(paste0("Starting local flowR server with pid ", pid))
         host <- default_server_host
