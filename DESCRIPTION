@@ -14,7 +14,8 @@ Imports:
     miniUI,
     rstudioapi,
     flowr,
-    pingr
+    pingr,
+    sys
 Remotes:
     flowr=github::flowr-analysis/flowr-r-adapter
 License: GPL-3 + file LICENSE
