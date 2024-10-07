@@ -7,7 +7,7 @@ slice_addin <- function() {
 
   criterion <- find_criterion(selection[[1]], selection[[2]], context$contents)
 
-  print(paste0("Slicing for criterion ", criterion))
+  cat(paste0("[flowR] Slicing for criterion ", criterion, "\n"))
 
   # nolint: object_usage_linter (fails to recognize flowr_session_storage as a global var)
   conn_pid <- flowr_session_storage()
@@ -55,6 +55,6 @@ slice_addin <- function() {
 reconstruct_addin <- function() {
   result <- slice_addin()
   code <- result$results$reconstruct$code
-  print(paste0("Showing reconstruct view for ", code))
-  display_code(if (is.null(code)) "No reconstructed code available" else code)
+  cat(paste0("[flowR] Showing reconstruct view"))
+  display_code(if(is.null(code)) "No reconstructed code available" else code)
 }

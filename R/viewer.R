@@ -14,7 +14,7 @@ display_html <- function(head, body) {
 </html>', head, body)
 
   file <- tempfile(fileext = ".html")
-  print(paste0("Using temp file ", file))
+  cat(paste0("[flowR] Using temp file ", file, "\n"))
   writeLines(html, file)
   getOption("viewer")(file)
 }

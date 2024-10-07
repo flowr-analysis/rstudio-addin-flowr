@@ -21,5 +21,5 @@ mark_slice <- function(slice_locations, path, criterion) {
     )
   }
   rstudioapi::sourceMarkers("flowr-slice", markers)
-  print(paste0("Highlighting ", length(markers), " tokens for slice ", criterion))
+  cat(paste0("[flowR] Highlighting ", length(markers), " tokens for slice ", criterion, "\n"))
 }
