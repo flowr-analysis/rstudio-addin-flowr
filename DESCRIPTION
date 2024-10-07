@@ -13,7 +13,8 @@ Imports:
     bslib,
     miniUI,
     rstudioapi,
-    flowr
+    flowr,
+    pingr
 Remotes:
     flowr=github::flowr-analysis/flowr-r-adapter
 License: GPL-3 + file LICENSE

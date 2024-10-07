@@ -3,7 +3,7 @@
 #' @export
 install_node_addin <- function() {
   base <- node_base_dir()
-  print(paste0("Installing Node.js and flowR Shell in ", base))
+  cat(paste0("Installing Node.js and flowR Shell in ", base, "\n"))
   node_ver <- read_flowr_pref(pref_node_version, default_node_version)
   assure_valid_semver(node_ver)
   flowr_ver <- read_flowr_pref(pref_flowr_version, default_flowr_version)
@@ -14,9 +14,9 @@ install_node_addin <- function() {
       flowr::install_flowr(flowr_ver, TRUE, base)
       # check if the flowr namespace exists
       if ("flowr" %in% rownames(utils::installed.packages())) {
-        print("Successfully installed Node.js and flowR Shell")
+        cat("Successfully installed Node.js and flowR Shell\n")
       } else {
-        stop("Failed to install flowR. Please check the R console for more information.")
+        stop("Failed to install flowR. Please check the R console for more information.\n")
       }
     },
     error = function(e) {

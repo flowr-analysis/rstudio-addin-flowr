@@ -47,10 +47,18 @@ make_flowr_session_storage <- function() {
           return()
         }
         cat(paste0("[flowR] Starting local flowR server with pid ", pid, "\n"))
+        # wait until the server has started up
+        waited <- 0
+        while (waited < 30 && is.na(sys::exec_status(pid, FALSE))) {
+          Sys.sleep(1)
+          waited <- waited + 1
+          cat(paste0("Waiting for flowR server to start up (", waited, "s)\n"))
+          if (!is.na(pingr::ping_port(default_server_host, default_server_port, count = 1))) {
+            break
+          }
+        }
         host <- default_server_host
         port <- default_server_port
-        # sleep a bit until the server has fully started up
-        Sys.sleep(5)
       } else {
         # connect externally
         cat("[flowR] Connecting to flowR server\n")
@@ -65,7 +73,7 @@ make_flowr_session_storage <- function() {
           stop(paste0("[flowR] Failed to connect to flowR server at ", host, ":", port, ": ", e))
         }
       )
-      print(conn_hello[[2]])
+      cat(paste0(conn_hello[[2]], "\n"))
       connection <<- conn_hello[[1]]
     } else {
       cat("[flowR] flowR server already connected\n")

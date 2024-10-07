@@ -55,6 +55,6 @@ slice_addin <- function() {
 reconstruct_addin <- function() {
   result <- slice_addin()
   code <- result$results$reconstruct$code
-  cat(paste0("[flowR] Showing reconstruct view"))
+  cat(paste0("[flowR] Showing reconstruct view\n"))
   display_code(if(is.null(code)) "No reconstructed code available" else code)
 }
