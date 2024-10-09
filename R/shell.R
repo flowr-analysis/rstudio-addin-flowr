@@ -57,6 +57,16 @@ make_flowr_session_storage <- function() {
             break
           }
         }
+
+        status <- sys::exec_status(pid, FALSE)
+        if (!is.na(status)) {
+          message(paste0("[flowR] There was an error starting the flowR server, and it exited with code ", status, ". If this keeps happening, you may need to reinstall flowR by running the \"Install Node.js and flowR Shell\" addin (rstudioaddinflowr:::install_node_addin()) again."))
+          if (rstudioapi::showQuestion("[flowR] Server error", "There was an error starting the flowR server. If this keeps happening, you may need to reinstall flowR. Do so now?")) {
+            install_node_addin()
+          }
+          return()
+        }
+
         host <- default_server_host
         port <- default_server_port
       } else {

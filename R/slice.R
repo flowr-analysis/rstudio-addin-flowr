@@ -11,6 +11,9 @@ slice_addin <- function() {
 
   # nolint: object_usage_linter (fails to recognize flowr_session_storage as a global var)
   conn_pid <- flowr_session_storage()
+  if (is.na(conn_pid)) {
+    return()
+  }
 
   # analyze the file
   analysis <- flowr::send_request(conn_pid$connection, list(
@@ -56,5 +59,5 @@ reconstruct_addin <- function() {
   result <- slice_addin()
   code <- result$results$reconstruct$code
   cat(paste0("[flowR] Showing reconstruct view\n"))
-  display_code(if(is.null(code)) "No reconstructed code available" else code)
+  display_code(if (is.null(code)) "No reconstructed code available" else code)
 }
