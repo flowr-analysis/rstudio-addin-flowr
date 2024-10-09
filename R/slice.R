@@ -11,7 +11,7 @@ slice_addin <- function() {
 
   # nolint: object_usage_linter (fails to recognize flowr_session_storage as a global var)
   conn_pid <- flowr_session_storage()
-  if (is.na(conn_pid)) {
+  if (is.null(conn_pid)) {
     return()
   }
 
