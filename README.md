@@ -5,10 +5,10 @@ RStudio addin for [*flowR*](https://github.com/Code-Inspect/flowr)
 ![A screenshot of the addin in use, showing the command palette with flowR addins visible, as well as a reconstructed piece of code in the viewer to the left](media/splash.png)
 
 ## Installing
-This package is currently only available here on GitHub, but it can be installed easily using the devtools package by running the following commands:
+This package is currently only available here on GitHub, but it can be installed easily using the remotes package by running the following commands:
 ```R
-install.packages("devtools")
-devtools::install_github("flowr-analysis/rstudio-addin-flowr")
+install.packages("remotes")
+remotes::install_github("flowr-analysis/rstudio-addin-flowr")
 ```
 
 In the future, we plan on making the package available on CRAN as well.
