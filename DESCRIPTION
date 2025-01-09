@@ -4,7 +4,7 @@ Title: R Slicer (flowR)
 Version: 0.1.1
 Authors@R: c(
     person("Florian", "Sihler", email = "florian.sihler@uni-ulm.de", role = "cre"),
-    person("Julian", "Schubert", email = "julian.schubert@uni-ulm.de", role = "cre"),
+    person("Julian", "Schubert", email = "julian.schubert@uni-ulm.de", role = "aut"),
     person("flowr-analysis", role = "cph"))
 Description: Retrieve R program slices directly within your IDE using flowR.
 Depends:
