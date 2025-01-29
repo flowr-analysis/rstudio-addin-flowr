@@ -32,6 +32,7 @@ display_code <- function(code) {
 <pre><code style="position: absolute; top: 0; left: 0; bottom: 0; right: 0;" class="language-r">%s</code></pre>
 <script>
   hljs.highlightAll();
+  <button>Hello World</button>
 </script>', code)
   )
 }
