@@ -17,3 +17,8 @@ Name: flowR: Open Preferences
 Description: Opens the Preferences menu, where flowR-specific settings can be changed
 Binding: open_prefs_addin
 Interactive: true
+
+Name: flowR: Open flowR
+Description: Opens a seperate Editor, where flowR can be easily used
+Binding: open_flowr
+Interactive: true
