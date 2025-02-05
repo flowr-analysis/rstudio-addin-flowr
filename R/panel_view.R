@@ -2,8 +2,14 @@
 #'
 #' @export
 open_flowr <- function() {
-  library(shiny)
-  ui <- fluidPage(
+  contents <- rstudioapi::getActiveDocumentContext()
+  content <- paste0(contents$contents, collapse = "\n")
+  
+  
+  ui <- miniUI::miniPage(
+    miniUI::miniContentPanel(
+      shiny::p(content),
+    )
     
   )
 
