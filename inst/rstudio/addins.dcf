@@ -17,3 +17,13 @@ Name: flowR: Open Preferences
 Description: Opens the Preferences menu, where flowR-specific settings can be changed
 Binding: open_prefs_addin
 Interactive: true
+
+Name: flowR: Dump Dependencies
+Description: Calculates the dependencies of the current file using the dependencies query and dumps the results into the R shell
+Binding: dump_dependencies_addin
+Interactive: true
+
+Name: flowR: Show Dependencies
+Description: Calculates the dependencies of the current file using the dependencies query and displays the results
+Binding: show_dependencies_addin
+Interactive: true
