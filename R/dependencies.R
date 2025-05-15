@@ -50,7 +50,7 @@ show_dependencies_addin <- function() {
   df <- add_segment(dependencies, "sourcedFiles", "Source", "file", df)
   df <- add_segment(dependencies, "readData", "Read", "source", df)
   df <- add_segment(dependencies, "writtenData", "Write", "destination", df)
-  View(df, paste0("Dependencies of ", dependencies$file))
+  View(df, paste0("Dependencies of ", basename(dependencies$file)))
 }
 
 get_dependencies <- function() {
