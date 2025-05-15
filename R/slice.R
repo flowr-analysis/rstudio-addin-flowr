@@ -24,14 +24,7 @@ slice_addin <- function() {
     filetoken = "@tmp",
     content = paste0(context$contents, collapse = "\n")
   ))
-
-  # map node ids to their location
-  id_to_location_map <- list()
-  flowr::visit_node(analysis$results$normalize$ast, function(node) {
-    if (!is.null(node$location)) {
-      id_to_location_map[paste0(node$info$id)] <<- list(node$location)
-    }
-  })
+  id_to_location_map <- make_id_to_location_map(analysis)
 
   # slice the file
   result <- flowr::send_request(conn_pid$connection, list(
