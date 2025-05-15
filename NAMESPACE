@@ -6,5 +6,3 @@ export(open_prefs_addin)
 export(reconstruct_addin)
 export(show_dependencies_addin)
 export(slice_addin)
-
-importFrom("utils", "View")
