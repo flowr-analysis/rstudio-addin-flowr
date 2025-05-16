@@ -23,7 +23,7 @@ reconstruct_addin <- function() {
 dump_reconstruct_addin <- function() {
   result <- get_slice()$result
   code <- result$results$reconstruct$code
-  cat(code)
+  cat(if (is.null(code)) "No reconstructed code available" else code)
   return(invisible(code))
 }
 
