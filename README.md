@@ -37,7 +37,7 @@ The connection will automatically be initiated when the first addin that require
 
 You can generate a [slice](https://github.com/flowr-analysis/flowr/wiki/Terminology#program-slice) of the currently highlighted variable in any R code by using the "Slice for Cursor Position" addin. All code that is part of the generated slice will then be highlighted with a blue symbol in the gutter.
 
-When using the "Reconstruct for Cursor Position" addin, the slice's reconstructed code is also shown in the viewer.
+When using the "Reconstruct for Cursor Position" addin, the slice's reconstructed code is also shown in the viewer. The "Dump Reconstructed Code for Cursor Position" addin shows the reconstructed code in the R console instead.
 
 ### Dependencies View
 

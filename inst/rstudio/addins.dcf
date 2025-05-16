@@ -4,8 +4,13 @@ Binding: slice_addin
 Interactive: true
 
 Name: flowR: Reconstruct for Cursor Position
-Description: Generates a slice for the currently highlighted variable and outputs the corresponding reconstructed code
+Description: Generates a slice for the currently highlighted variable and displays the corresponding reconstructed code
 Binding: reconstruct_addin
+Interactive: true
+
+Name: flowR: Dump Reconstructed Code for Cursor Position
+Description: Generates a slice for the currently highlighted variable and dumps the corresponding reconstructed code into the R shell
+Binding: dump_reconstruct_addin
 Interactive: true
 
 Name: flowR: Install Node.js and flowR Shell

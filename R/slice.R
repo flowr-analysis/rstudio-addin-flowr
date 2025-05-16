@@ -2,6 +2,32 @@
 #'
 #' @export
 slice_addin <- function() {
+  result <- get_slice()
+  mark_slice(result$slice_locations, result$filename, result$criterion)
+  return(invisible(result))
+}
+
+#' Generates a slice for the currently highlighted variable and displays the corresponding reconstructed code
+#'
+#' @export
+reconstruct_addin <- function() {
+  result <- get_slice()$result
+  code <- result$results$reconstruct$code
+  cat(paste0("[flowR] Showing reconstruct view\n"))
+  display_code(if (is.null(code)) "No reconstructed code available" else code)
+}
+
+#' Generates a slice for the currently highlighted variable and dumps the corresponding reconstructed code into the R shell
+#'
+#' @export
+dump_reconstruct_addin <- function() {
+  result <- get_slice()$result
+  code <- result$results$reconstruct$code
+  cat(code)
+  return(invisible(code))
+}
+
+get_slice <- function() {
   context <- rstudioapi::getActiveDocumentContext()
   selection <- context$selection[[1]]$range["start"][[1]]
 
@@ -40,17 +66,12 @@ slice_addin <- function() {
   for (id in slice) {
     slice_locations[[length(slice_locations) + 1]] <- id_to_location_map[paste0(id)]
   }
-  mark_slice(slice_locations, context$path, criterion)
 
-  return(invisible(result))
-}
-
-#' Generates a slice for the currently highlighted variable and outputs the corresponding reconstructed code
-#'
-#' @export
-reconstruct_addin <- function() {
-  result <- slice_addin()
-  code <- result$results$reconstruct$code
-  cat(paste0("[flowR] Showing reconstruct view\n"))
-  display_code(if (is.null(code)) "No reconstructed code available" else code)
+  return(list(
+    filename = context$path,
+    criterion = criterion,
+    result = result,
+    id_to_location_map = id_to_location_map,
+    slice_locations = slice_locations
+  ))
 }
