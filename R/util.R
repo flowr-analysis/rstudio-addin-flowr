@@ -23,13 +23,3 @@ mark_slice <- function(slice_locations, path, criterion) {
   rstudioapi::sourceMarkers("flowr-slice", markers)
   cat(paste0("[flowR] Highlighting ", length(markers), " tokens for slice ", criterion, "\n"))
 }
-
-make_id_to_location_map <- function(analysis) {
-  id_to_location_map <- list()
-  flowr::visit_node(analysis$results$normalize$ast, function(node) {
-    if (!is.null(node$location)) {
-      id_to_location_map[paste0(node$info$id)] <<- list(node$location)
-    }
-  })
-  return(id_to_location_map)
-}

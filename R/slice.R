@@ -50,7 +50,7 @@ get_slice <- function() {
     filetoken = "@tmp",
     content = paste0(context$contents, collapse = "\n")
   ))
-  id_to_location_map <- make_id_to_location_map(analysis)
+  id_to_location_map <- flowr::make_id_to_location_map(analysis$results$normalize$ast)
 
   # slice the file
   result <- flowr::send_request(conn_pid$connection, list(
