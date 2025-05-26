@@ -8,7 +8,7 @@ pref_use_local_shell <- "use_local_shell"
 pref_use_docker <- "use_docker"
 
 default_node_version <- "22.5.1"
-default_flowr_version <- "2.0.25"
+default_flowr_version <- "2.2.12"
 default_server_host <- "localhost"
 default_server_port <- 1042
 default_light_theme <- "github"

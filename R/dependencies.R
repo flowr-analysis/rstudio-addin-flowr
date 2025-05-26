@@ -71,7 +71,7 @@ get_dependencies <- function() {
     filetoken = "@tmp",
     content = paste0(context$contents, collapse = "\n")
   ))
-  id_to_location_map <- make_id_to_location_map(analysis)
+  id_to_location_map <- flowr::make_id_to_location_map(analysis$results$normalize$ast)
 
   dependencies <- flowr::send_request(conn_pid$connection, list(
     type = "request-query",
