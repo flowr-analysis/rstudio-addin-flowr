@@ -97,12 +97,12 @@ get_slice <- function(filename = NULL, code = NULL, criterion = NULL) {
 #' @param filename The name of the file to slice. If NULL, the passed code fragment is used.
 #' @param code The code fragment to slice, as a character. If also NULL, the currently active document is used.
 #' @param criterion The slicing criterion to use. Needs to be non-NULL if filename or code is provided.
-#' @param print If TRUE, the reconstructed code is printed to the console and returned invisibly. Defaults to FALSE.
+#' @param print If TRUE, the reconstructed code is printed to the console and returned invisibly. Defaults to TRUE.
 #'
 #' @return The reconstructed code fragment for the generated slice.
 #'
 #' @export
-get_reconstruction <- function(filename = NULL, code = NULL, criterion = NULL, print = FALSE) {
+get_reconstruction <- function(filename = NULL, code = NULL, criterion = NULL, print = TRUE) {
   result <- get_slice(filename, code, criterion)$result
   code <- result$results$reconstruct$code
   if (print) {
