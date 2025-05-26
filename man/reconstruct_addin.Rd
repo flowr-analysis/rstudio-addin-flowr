@@ -2,10 +2,10 @@
 % Please edit documentation in R/slice.R
 \name{reconstruct_addin}
 \alias{reconstruct_addin}
-\title{Generates a slice for the currently highlighted variable and outputs the corresponding reconstructed code}
+\title{Generates a slice for the currently highlighted variable and displays the corresponding reconstructed code}
 \usage{
 reconstruct_addin()
 }
 \description{
-Generates a slice for the currently highlighted variable and outputs the corresponding reconstructed code
+Generates a slice for the currently highlighted variable and displays the corresponding reconstructed code
 }
