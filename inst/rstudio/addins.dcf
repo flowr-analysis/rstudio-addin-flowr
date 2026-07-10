@@ -13,8 +13,8 @@ Description: Generates a slice for the currently highlighted variable and dumps 
 Binding: dump_reconstruct_addin
 Interactive: true
 
-Name: flowR: Install Node.js and flowR Shell
-Description: Installs Node.js locally in the addin's package directory, as well as flowR's NPM package which provides a local version of the flowR shell
+Name: flowR: Install flowR engine
+Description: Downloads and caches a flowR engine (a self-contained binary by default) so the addin can run flowR locally
 Binding: install_node_addin
 Interactive: true
 

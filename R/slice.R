@@ -3,17 +3,23 @@
 #' @export
 slice_addin <- function() {
   result <- get_slice()
+  if (is.null(result)) {
+    return(invisible(NULL))
+  }
   mark_slice(result$slice_locations, result$filename, result$criterion)
-  return(invisible(result))
+  invisible(result)
 }
 
 #' Generates a slice for the currently highlighted variable and displays the corresponding reconstructed code
 #'
 #' @export
 reconstruct_addin <- function() {
-  result <- get_slice()$result
-  code <- result$results$reconstruct$code
-  cat(paste0("[flowR] Showing reconstruct view\n"))
+  result <- get_slice()
+  if (is.null(result)) {
+    return(invisible(NULL))
+  }
+  code <- result$result$code
+  cat("[flowR] Showing reconstruct view\n")
   display_code(if (is.null(code)) "No reconstructed code available" else code)
 }
 
@@ -30,7 +36,7 @@ dump_reconstruct_addin <- function() {
 #' @param code The code fragment to slice, as a character. If also NULL, the currently active document is used.
 #' @param criterion The slicing criterion to use. Needs to be non-NULL if filename or code is provided.
 #'
-#' @return A list containing the filename, criterion, result of the slice request, a mapping from IDs to locations, and the slice locations.
+#' @return A list containing the filename, criterion, slice result, a mapping from IDs to locations, and the slice locations.
 #'
 #' @export
 get_slice <- function(filename = NULL, code = NULL, criterion = NULL) {
@@ -47,52 +53,31 @@ get_slice <- function(filename = NULL, code = NULL, criterion = NULL) {
     stop("Either pass a filename or a code fragment, but not both")
   } else if (!is.null(filename)) {
     code <- paste0(readLines(filename, warn = FALSE), collapse = "\n")
-  } else if (!is.null(code)) {
+  } else {
     filename <- "__tmp"
   }
 
-  # nolint: object_usage_linter (fails to recognize flowr_session_storage as a global var)
-  conn_pid <- flowr_session_storage()
-  if (is.null(conn_pid)) {
-    return()
+  # nolint: object_usage_linter (flowr_session_storage is a package-level global)
+  session <- flowr_session_storage()
+  if (is.null(session)) {
+    return(NULL)
   }
 
-  # analyze the file
-  analysis <- flowr::send_request(conn_pid$connection, list(
-    type = "request-file-analysis",
-    id = "0",
-    filename = filename,
-    format = "json",
-    filetoken = "@tmp",
-    content = code
-  ))
-  id_to_location_map <- flowr::make_id_to_location_map(analysis$results$normalize$ast)
+  result <- flowr::slice(code = code, criterion = criterion, session = session)
+  # the adapter returns the slice's source locations as a list of length-4
+  # numeric vectors, which mark_slice() consumes directly
+  slice_locations <- tryCatch(flowr::flowr_slice_locations(result),
+                              error = function(e) list())
 
-  # slice the file
-  result <- flowr::send_request(conn_pid$connection, list(
-    type = "request-slice",
-    id = "0",
-    filetoken = "@tmp",
-    criterion = list(criterion)
-  ))
-  slice <- result$results$slice$result
-
-  # convert slice info to lines
-  slice_locations <- list()
-  for (id in slice) {
-    slice_locations[[length(slice_locations) + 1]] <- id_to_location_map[paste0(id)]
-  }
-
-  return(list(
+  list(
     filename = filename,
     criterion = criterion,
     result = result,
-    id_to_location_map = id_to_location_map,
     slice_locations = slice_locations
-  ))
+  )
 }
 
-#' Generates a slice for the given filename and criterion, code fragment and criterion, or the currently highlighted variable in the active RStudio document and returns the reconstructed code fragment.
+#' Generates a slice and returns the reconstructed code fragment.
 #'
 #' @param filename The name of the file to slice. If NULL, the passed code fragment is used.
 #' @param code The code fragment to slice, as a character. If also NULL, the currently active document is used.
@@ -103,23 +88,21 @@ get_slice <- function(filename = NULL, code = NULL, criterion = NULL) {
 #'
 #' @export
 get_reconstruction <- function(filename = NULL, code = NULL, criterion = NULL, print = TRUE) {
-  result <- get_slice(filename, code, criterion)$result
-  code <- result$results$reconstruct$code
+  sliced <- get_slice(filename, code, criterion)
+  if (is.null(sliced)) {
+    return(invisible(NULL))
+  }
+  code <- sliced$result$code
   if (print) {
     cat(if (is.null(code)) "No reconstructed code available" else code)
     return(invisible(code))
-  } else {
-    return(code)
   }
+  code
 }
 
-#' Generates a slice for the given filename and criterion, code fragment and criterion, or the currently highlighted variable in the active RStudio document and returns the reconstructed code fragment.
+#' Generates a slice and returns the reconstructed code fragment (alias for [get_reconstruction()]).
 #'
-#' @param filename The name of the file to slice. If NULL, the passed code fragment is used.
-#' @param code The code fragment to slice, as a character. If also NULL, the currently active document is used.
-#' @param criterion The slicing criterion to use. Needs to be non-NULL if filename or code is provided.
-#' @param print If TRUE, the reconstructed code is printed to the console and returned invisibly. Defaults to TRUE.
-#'
+#' @inheritParams get_reconstruction
 #' @return The reconstructed code fragment for the generated slice.
 #'
 #' @export

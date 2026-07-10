@@ -8,10 +8,10 @@ on:
 jobs:
   devtools-check:
     strategy:
-      # currently, we expect the addin to work with most of the same versions as flowr itself
-      # see https://github.com/flowr-analysis/flowr/blob/main/.github/workflows/full-test.yaml#L20
+      # 4.1 is the floor: the test harness (devtools, current testthat) needs
+      # R >= 4.1. The addin itself only needs R >= 4.0.
       matrix:
-        r-version: [ '4.4.0', '4.3.2', '4.2.3', '4.0.0' ]
+        r-version: [ '4.4.0', '4.3.2', '4.2.3', '4.1.0' ]
         os: [ ubuntu-latest ]
         include:
            - os: macos-latest

@@ -1,90 +1,62 @@
-#' Calculates the dependencies of the current file using the dependencies query
-#' and dumps the results into the R shell
+# Segments of flowr::flowr_overview() shown in the dependency views.
+flowr_dep_segments <- list(
+  list(key = "library", title = "Libraries", type = "Library"),
+  list(key = "source", title = "Sourced files", type = "Source"),
+  list(key = "read", title = "Read files", type = "Read"),
+  list(key = "write", title = "Written files", type = "Write")
+)
+
+#' Dump the current file's dependencies to the R console
 #'
 #' @export
 dump_dependencies_addin <- function() {
-  print_segment <- function(dependencies, segment, title, name) {
-    results <- dependencies$dependencies$results$dependencies[[segment]]
-    if (length(results) == 0) {
-      return()
+  ov <- get_overview()
+  if (is.null(ov)) {
+    return(invisible(NULL))
+  }
+  for (seg in flowr_dep_segments) {
+    items <- ov[[seg$key]]
+    if (length(items) == 0) {
+      next
     }
-    cat(paste0(title, ":\n"))
-    for (entry in results) {
-      source <- dependencies$id_to_location_map[[entry$nodeId]]
-      cat("  ", paste0(entry[[name]], " by ", entry$functionName, " in line ", source[[1]], "\n"))
+    cat(paste0(seg$title, ":\n"))
+    for (it in items) {
+      cat("  ", paste0(it$value, " by ", it$functionName, " in line ", it$line, "\n"))
     }
   }
-
-  dependencies <- get_dependencies()
-  print_segment(dependencies, "libraries", "Libraries", "libraryName")
-  print_segment(dependencies, "sourcedFiles", "Sourced files", "file")
-  print_segment(dependencies, "readData", "Read files", "source")
-  print_segment(dependencies, "writtenData", "Written files", "destination")
+  invisible(ov)
 }
 
-#' Calculates the dependencies of the current file using the dependencies query
-#' and displays the results semi-beautifully
+#' Show the current file's dependencies in a table
 #'
 #' @export
 show_dependencies_addin <- function() {
-  add_segment <- function(dependencies, segment, type, name, df) {
-    results <- dependencies$dependencies$results$dependencies[[segment]]
-    if (length(results) == 0) {
-      return()
-    }
-    for (entry in results) {
-      source <- dependencies$id_to_location_map[[entry$nodeId]]
-      df <- rbind(df, data.frame(
-        Type = type,
-        Line = source[[1]],
-        Function = entry$functionName,
-        Name = entry[[name]]
-      ))
-    }
-    return(df)
+  ov <- get_overview()
+  if (is.null(ov)) {
+    return(invisible(NULL))
   }
-
-  dependencies <- get_dependencies()
-  df <- data.frame(matrix(ncol = 3, nrow = 0))
-  df <- add_segment(dependencies, "libraries", "Library", "libraryName", df)
-  df <- add_segment(dependencies, "sourcedFiles", "Source", "file", df)
-  df <- add_segment(dependencies, "readData", "Read", "source", df)
-  df <- add_segment(dependencies, "writtenData", "Write", "destination", df)
-  utils::View(df, paste0("Dependencies of ", basename(dependencies$file)))
+  df <- data.frame(Type = character(), Line = character(),
+                   Function = character(), Name = character())
+  for (seg in flowr_dep_segments) {
+    for (it in ov[[seg$key]]) {
+      df <- rbind(df, data.frame(Type = seg$type, Line = it$line,
+                                 Function = it$functionName, Name = it$value))
+    }
+  }
+  utils::View(df, paste0("Dependencies of ", basename(attr(ov, "file"))))
 }
 
-get_dependencies <- function() {
+# Overview of the active document (each item has value/functionName/line/criterion).
+get_overview <- function() {
   context <- rstudioapi::getActiveDocumentContext()
   cat(paste0("[flowR] Getting dependencies for file ", context$path, "\n"))
-
-  # nolint: object_usage_linter (fails to recognize flowr_session_storage as a global var)
-  conn_pid <- flowr_session_storage()
-  if (is.null(conn_pid)) {
-    return()
+  # nolint: object_usage_linter (flowr_session_storage is a package-level global)
+  session <- flowr_session_storage()
+  if (is.null(session)) {
+    return(NULL)
   }
-
-  analysis <- flowr::send_request(conn_pid$connection, list(
-    type = "request-file-analysis",
-    id = "0",
-    filename = context$path,
-    format = "json",
-    filetoken = "@tmp",
-    content = paste0(context$contents, collapse = "\n")
-  ))
-  id_to_location_map <- flowr::make_id_to_location_map(analysis$results$normalize$ast)
-
-  dependencies <- flowr::send_request(conn_pid$connection, list(
-    type = "request-query",
-    id = "0",
-    filetoken = "@tmp",
-    query = list(list(
-      type = "dependencies"
-    ))
-  ))
-
-  return(list(
-    dependencies = dependencies,
-    id_to_location_map = id_to_location_map,
-    file = context$path
-  ))
+  ov <- flowr::flowr_overview(code = paste0(context$contents, collapse = "\n"),
+                              session = session)
+  attr(ov, "file") <- context$path
+  ov
 }

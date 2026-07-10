@@ -21,17 +21,25 @@ For more info on using addins, see [the RStudio User Guide](https://docs.posit.c
 
 ### Preferences
 
-This package contains a variety of preferences that can be set through the *flowR* preferences menu available through the "Open Preferences" addin. 
+Open the *flowR* preferences (the "Open Preferences" addin) to choose the
+**engine** and flowR version, and the syntax-highlighting themes for the
+reconstruction view.
 
-These preferences include whether to start a local *flowR* shell, what syntax highlighting themes to use for the reconstruction view, and more.
+### Engines
 
-### Connecting to *flowR*
+All flowR handling lives in the [`flowr`](https://github.com/flowr-analysis/flowr-r-adapter)
+package; this addin is a thin UI on top of it. The engine options are:
 
-To connect to a *flowR* server, two connection modes are available, which can be chosen from in the preferences menu through the "Use local shell" checkbox: connecting to a remote *flowR* server, and starting up and connecting to a local *flowR* server.
+* `bundled` - flowR's JS + wasm shipped inside the `flowr` package; runs on your
+  Node.js, no download.
+* `binary` - a self-contained native flowR executable (no Node), downloaded once
+  and checksum/signature-verified.
+* `node` / `docker` - the flowR npm package or Docker image.
+* `auto` (default) - a cached binary, else the bundle, else the binary.
 
-To connect to a local *flowR* server, the "Install Node.js and flowR Shell" has to be run once after the package was installed. This causes a local installation of Node.js and *flowR* to be downloaded and stored in the package's installation directory.
-
-The connection will automatically be initiated when the first addin that requires one is run.
+The engine starts automatically the first time an addin needs it. To fetch the
+native binary up front, run the "Install Node.js and flowR Shell" addin (it calls
+`flowr::flowr_install()`).
 
 ### Slicing
 
@@ -60,3 +68,10 @@ devtools::install_local(".", force = TRUE); devtools::reload()
 ```
 
 from the repository's root directory.
+
+## AI-assisted development
+
+This addin (and the `flowr` adapter it builds on) was developed with substantial
+assistance from an AI coding assistant (Anthropic Claude), under human review.
+This covers **only this addin and the adapter** - in contrast, *flowR* itself is
+a separate, independently developed project and is **not** AI-generated.
